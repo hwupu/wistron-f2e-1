@@ -7,7 +7,7 @@
         </p>
       </figure>
       <div class="media-content">
-        <div class="level is-mobile">
+        <div class="level is-mobile has-text-weight-medium">
           <ul class="level-left">
             <li :class="{ green: isActive, 'level-item': true}">
               {{ order.status.type }}
@@ -22,7 +22,9 @@
         {{ order.name }}
       </div>
       <div class="media-right" style="align-self: center">
-        A
+        <a class="icon arrow">
+          a
+        </a>
       </div>
     </li>
   </ul>
@@ -54,4 +56,13 @@ export default {
 .bwImage
   filter: grayscale(100%)
 
+.icon
+  &.arrow
+    background-color: #aaa
+    display: inline-block
+    color: rgba(0,0,0,0)
+    mask: url('/arrow-right.svg')
+    height: 10pt
+    width: 6pt
+    vertical-align: middle
 </style>

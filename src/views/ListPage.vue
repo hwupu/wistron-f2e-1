@@ -1,10 +1,10 @@
 <template>
   <div class="listView">
-    <div class="listView-header">
+    <div class="listView-header has-text-weight-medium">
       進行中
     </div>
     <OrderList :orders="progress" isActive showDate />
-    <div class="listView-header">
+    <div class="listView-header has-text-weight-medium">
       已完成
     </div>
     <OrderList :orders="complete" />
