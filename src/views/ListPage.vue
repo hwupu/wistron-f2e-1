@@ -37,7 +37,8 @@ export default {
 <style lang="sass" scoped>
 .listView
   border: 1px solid rgba(219, 219, 219, 0.5)
-  max-width: 300pt
+  // For mockup propose:
+  // max-width: 300pt
 
   &-header
     background-color: rgba(219, 219, 219, 0.5)
