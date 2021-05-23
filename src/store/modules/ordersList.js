@@ -1,6 +1,7 @@
 /* eslint-disable */ 
 import mockList from './mock-data'
 import dateConvert from '@/utils/dateParser'
+import dateFormater from '@/utils/dateFormater'
 
 // 保留給UI呈現特效或提示
 const LoadingStatus = {
@@ -48,8 +49,13 @@ const actions = {
 
       // Sort the list in DESC order.
       const sorted = mockList.map(order => {
+
         // 先將民國轉換成西元
         order['UTC'] = dateConvert(order.date);
+
+        // 順便在一位數的月日之前加零
+        order.date = dateFormater(order.date);
+
         return order
 
         // 再比較日期（A<B是DESC order）
