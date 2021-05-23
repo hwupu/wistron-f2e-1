@@ -1,11 +1,15 @@
 /* eslint-disable */ 
-import mockList from './mock-data'
+import axios from 'axios'
 import dateConvert from '@/utils/dateParser'
 import dateFormater from '@/utils/dateFormater'
 
+const api = '/mock-data.json'
+
 // 保留給UI呈現特效或提示
 const LoadingStatus = {
-  Timeout: -1,
+  UnknowError: -3,
+  RequestError: -2,
+  ResponseError: -1,
   Init: 0,
   Loading: 1,
   Done: 2,
@@ -46,28 +50,42 @@ const actions = {
     if (state.status == LoadingStatus.Init) {
       commit('setStatus', LoadingStatus.Loading);
 
-      // TODO: Change to Axios API later
+      // Use Axios API to get response
+      axios.get(api).then((response) => {
 
-      // Sort the list in DESC order.
-      const sorted = mockList.map(order => {
+        // Sort the list in DESC order.
+        const sorted = response.data.map(order => {
 
-        // 先將民國轉換成西元
-        order['UTC'] = dateConvert(order.date);
+          // 先將民國轉換成西元
+          order['UTC'] = dateConvert(order.date);
 
-        // 順便在一位數的月日之前加零
-        order.date = dateFormater(order.date);
+          // 順便在一位數的月日之前加零
+          order.date = dateFormater(order.date);
 
-        return order
+          return order
 
-        // 再比較日期（A<B是DESC order）
-      }).sort((A, B) => A.UTC < B.UTC);
+          // 再比較日期（A<B是DESC order）
+        }).sort((A, B) => A.UTC < B.UTC);
 
-      // Seperate the list to 進行中 and 已完成.
-      const progress = sorted.filter(item => item.status.code <= 2);
-      const complete = sorted.filter(item => item.status.code >= 3);
+        // Seperate the list to 進行中 and 已完成.
+        const progress = sorted.filter(item => item.status.code <= 2);
+        const complete = sorted.filter(item => item.status.code >= 3);
 
-      commit('setItems', { progress, complete });
-      commit('setStatus', LoadingStatus.Done);
+        commit('setItems', { progress, complete });
+        commit('setStatus', LoadingStatus.Done);
+
+      }).catch((error) => {
+        if (error.response) {
+          // client received an error response (5xx, 4xx)
+          commit('setStatus', LoadingStatus.ResponseError);
+        } else if (error.request) {
+          // client never received a response, or request never left
+          commit('setStatus', LoadingStatus.RequestError);
+        } else {
+          // unknow error
+          commit('setStatus', LoadingStatus.UnknowError);
+        }
+      })
     }
   },
 
