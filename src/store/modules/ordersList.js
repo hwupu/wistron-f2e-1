@@ -16,6 +16,7 @@ const state = () => ({
   lastUpdate: null,
   progressList: [],
   completeList: [],
+  selectedOrder: null,
 })
 
 const getters = {
@@ -59,16 +60,21 @@ const actions = {
         return order
 
         // 再比較日期（A<B是DESC order）
-      }).sort((A, B) => A.UTC < B.UTC)
+      }).sort((A, B) => A.UTC < B.UTC);
 
       // Seperate the list to 進行中 and 已完成.
       const progress = sorted.filter(item => item.status.code <= 2);
       const complete = sorted.filter(item => item.status.code >= 3);
 
-      commit('setItems', { progress, complete })
+      commit('setItems', { progress, complete });
       commit('setStatus', LoadingStatus.Done);
     }
   },
+
+  // 選取的訂單資訊（因為沒ID所以傳全部資料, URL也無法區分）
+  select({commit}, order) {
+    commit('selectItem', order);
+  }
 
 }
 
@@ -81,6 +87,9 @@ const mutations = {
     state.status = status;
     state.lastUpdate = new Date();
   },
+  selectItem(state, order) {
+    state.selectedOrder = order;
+  }
 }
 
 export default {

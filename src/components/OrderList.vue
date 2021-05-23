@@ -1,6 +1,6 @@
 <template>
   <ul v-if="orders" class="orderList">
-    <li v-for="order in orders" :key="order.date" class="media">
+    <li v-for="order in orders" :key="order.date" @click="goViewDetails(order)" class="media">
       <figure class="media-left">
         <p class="image is-64x64">
           <img :class="{ bwImage: !isActive, 'is-rounded': true }" :src="order.logo">
@@ -37,7 +37,13 @@ export default {
     orders: Array,
     isActive: { type:Boolean, default: false },
     showDate: { type:Boolean, default: false },
-  }
+  },
+  methods: {
+    goViewDetails(order) {
+      this.$store.dispatch('ordersList/select', order);
+      this.$router.push('details');
+    }
+  },
 }
 </script>
 

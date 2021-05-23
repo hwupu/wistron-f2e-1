@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ListPage from '../views/ListPage.vue'
+import ListDetails from '../views/ListDetails.vue'
 
 const routes = [
   {
     path: '/',
     name: 'ListPage',
     component: ListPage
+  },
+  {
+    path: '/details',
+    name: 'ListDetails',
+    component: ListDetails
   },
   {
     path: '/setting',
